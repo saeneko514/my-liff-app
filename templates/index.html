@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>利用規約同意</title>
+  <script src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
+</head>
+<body>
+  <h2>利用規約</h2>
+  <p>【プライバシーに関する重要なお知らせ】<br>
+本サービス「かんじょうにっき」では、次の情報を取得し、下記の目的で利用します。<br>
+<p>
+■ 取得する情報
+・LINEユーザー識別子（userId）<br>
+・あなたが投稿する「感情日記」の本文（精神・心理状態を含む要配慮個人情報）<br>
+・投稿日時・端末等の利用メタデータ<br>
+<p>
+■ 利用目的
+<p>
+感情日記サービスの提供および品質向上のため
+<p>
+心理カウンセラーによる個別アドバイス・緊急対応のため
+<p>
+匿名化・統計化したうえでの研究・サービス改善のため
+<p>
+■ 第三者提供について<br>
+個人を特定できる形で第三者へ提供することはありません。<br>
+ただし、あなたまたは第三者の生命・身体の保護が必要な緊急時には、<br>
+最小限の情報を警察・医療機関等へ提供する場合があります（個人情報保護法23条1項2号）。<br>
+<p>
+■ 保管・管理について<br>
+・取得したデータは暗号化して厳重に管理し、アクセス権限を限定します。<br>
+・利用目的達成後 ［保管期間：1年］ を経過した個票データは速やかに削除します。<br>
+<p>
+■ あなたの権利<br>
+ご自身の情報について、開示・訂正・削除・利用停止をいつでも請求できます。<br>
+お問い合わせ窓口：info@namisapo.com<br>
+<p>
+上記内容をご確認のうえ、同意いただける場合は 「同意して開始」 をタップしてください。<br>
+同意いただけない場合、本サービスはご利用いただけません。<br>
+  </p>
+
+  <button id="agreeBtn">同意する</button>
+
+  <script>
+    async function init() {
+      await liff.init({ liffId: "YOUR_LIFF_ID" });
+      if (!liff.isLoggedIn()) liff.login();
+
+      document.getElementById("agreeBtn").onclick = async () => {
+        const profile = await liff.getProfile();
+        const userId = profile.userId;
+
+        await fetch("/api/agreement", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            userId: userId,
+            agreedAt: new Date().toISOString()
+          }),
+        });
+
+        alert("同意ありがとうございます！");
+        liff.closeWindow();
+      };
+    }
+
+    init();
+  </script>
+</body>
+</html>
