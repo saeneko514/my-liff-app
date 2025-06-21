@@ -52,7 +52,7 @@
         const userId = profile.userId;
         const displayName = profile.displayName;
 
-        const res = await fetch("https://my-liff-app.onrender.com/api/agreement", {
+        const res = await fetch("https://my-liff-app.onrender.com", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
