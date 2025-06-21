@@ -61,16 +61,21 @@
             agreedAt: new Date().toISOString()
           }),
         });
-
-        const result = await res.json();
-
-        if (result.status === "already_agreed") {
-          document.body.innerHTML = "<h2>すでに同意いただいています</h2>";
-        } else if (result.status === "saved" || result.status === "success") {
-          alert("同意ありがとうございます！");
-          liff.closeWindow();
-        } else {
-          alert("エラーが発生しました。");
+        
+        const text = await res.text();
+        console.log("レスポンス全文:", text);
+        
+        try {
+          const result = JSON.parse(text);
+          console.log("パース済みレスポンス:", result);
+          if (result.status === "success" || result.status === "saved") {
+            alert("同意ありがとうございます！");
+            liff.closeWindow();
+          } else {
+            alert("エラーが発生しました: " + (result.message || "不明なエラー"));
+          }
+        } catch (e) {
+            alert("レスポンス解析エラー");
         }
       };
     }
