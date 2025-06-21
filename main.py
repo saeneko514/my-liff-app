@@ -15,8 +15,9 @@ def index():
 @app.route("/api/agreement", methods=["POST"])
 def agreement():
     data = request.json
+    print("Received data:", data) 
     user_id = data.get("userId")
-    display_name = data.get("displayName")  # ← 追加
+    display_name = data.get("displayName")  
     timestamp = data.get("agreedAt", datetime.utcnow().isoformat())
 
     if not user_id or not display_name:
