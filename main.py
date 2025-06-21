@@ -15,7 +15,7 @@ def index():
 @app.route("/api/agreement", methods=["POST"])
 def agreement():
     data = request.json
-    print("Received data:", data) 
+    print("[POST /api/agreement] 受信データ:", data)
     user_id = data.get("userId")
     display_name = data.get("displayName")  
     timestamp = data.get("agreedAt", datetime.utcnow().isoformat())
