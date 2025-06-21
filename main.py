@@ -29,7 +29,7 @@ def agreement():
     payload = {
         "userAgreement": {
             "userId": user_id,
-            "displayName": display_name,  # ← 追加
+            "displayName": display_name,
             "agreedAt": timestamp
         }
     }
@@ -42,4 +42,4 @@ def agreement():
         return jsonify({"status": "success"}), 200
     else:
         print(f"[ERROR] {response.text}")
-        return jsonify({"status": "error", "message": response.text}), 500
+        return jsonify({"status": "error", "message": response.text}), 500  
