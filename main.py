@@ -4,7 +4,7 @@ import requests
 import os
 
 SHEETY_ID = os.environ["SHEETY_ID"]
-SHEETY_ENDPOINT = f"https://api.sheety.co/{SHEETY_ID}/userAgreements/userdata"
+SHEETY_ENDPOINT = f"https://api.sheety.co/{SHEETY_ID}/userAgreements/シート1
 
 app = Flask(__name__)
 
