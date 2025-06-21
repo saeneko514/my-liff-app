@@ -38,58 +38,54 @@
 
   <button id="agreeBtn">同意する</button>
 
-  <script>
-    async function init() {
-      await liff.init({ liffId: "2007611883-Ov7pDk5V" });
+<script>
+  async function init() {
+    await liff.init({ liffId: "2007611883-Ov7pDk5V" });
 
-      document.getElementById("agreeBtn").onclick = async () => {
-        console.log("✅ 同意ボタンが押されました");
-
-        if (!liff.isLoggedIn()) {
-          console.log("⚠️ LIFFに未ログイン。ログイン開始");
-          liff.login();
-          return;
-        }
-
-        try {
-          const profile = await liff.getProfile();
-          const userId = profile.userId;
-          const displayName = profile.displayName;
-
-          console.log("✅ ユーザーID:", userId);
-          console.log("✅ 表示名:", displayName);
-
-          const response = await fetch("https://my-liff-app.onrender.com/api/agreement", {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json"
-            },
-            body: JSON.stringify({
-              userId: userId,
-              displayName: displayName,
-              agreedAt: new Date().toISOString()
-            })
-          });
-
-          console.log("✅ fetch完了、ステータス:", response.status);
-          const text = await response.text();
-          console.log("📦 サーバーレスポンス:", text);
-
-          const result = JSON.parse(text);
-          if (result.status === "success" || result.status === "saved") {
-            alert("同意ありがとうございます！");
-            liff.closeWindow();
-          } else {
-            alert("⚠️ エラーが発生しました: " + (result.message || "不明なエラー"));
-          }
-        } catch (e) {
-          console.error("❌ fetch処理中にエラー:", e);
-          alert("通信エラーまたは解析エラーが発生しました。");
-        }
-      };
+    if (!liff.isLoggedIn()) {
+      console.log("⚠️ LIFFに未ログイン。ログイン開始");
+      liff.login();
+      return;
     }
 
-    init(); // LIFF初期化＋ボタンイベント設定
-  </script>
+    // ログイン済の場合 → 同意送信
+    const profile = await liff.getProfile();
+    const userId = profile.userId;
+    const displayName = profile.displayName;
+
+    console.log("✅ ログイン済み。ユーザーID:", userId);
+    console.log("✅ 表示名:", displayName);
+
+    // fetchで同意送信
+    try {
+      const response = await fetch("https://my-liff-app.onrender.com/api/agreement", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          userId,
+          displayName,
+          agreedAt: new Date().toISOString()
+        })
+      });
+
+      console.log("✅ fetch完了、ステータス:", response.status);
+      const text = await response.text();
+      console.log("📦 サーバーレスポンス:", text);
+
+      const result = JSON.parse(text);
+      if (result.status === "success" || result.status === "saved") {
+        alert("同意ありがとうございます！");
+        liff.closeWindow();
+      } else {
+        alert("⚠️ エラーが発生しました: " + (result.message || "不明なエラー"));
+      }
+    } catch (e) {
+      console.error("❌ fetch処理中にエラー:", e);
+      alert("通信エラーまたは解析エラーが発生しました。");
+    }
+  }
+
+  init(); // 自動実行
+</script>
 </body>
 </html>
