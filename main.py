@@ -21,7 +21,6 @@ def agreement():
     user_id = data.get("userId")
     display_name = data.get("displayName")  
     timestamp = data.get("agreedAt", datetime.utcnow().isoformat())
-    return jsonify({"status": "success"}), 200
 
     if not user_id or not display_name:
         return jsonify({"status": "error", "message": "userId または displayName がありません"}), 400
@@ -34,12 +33,14 @@ def agreement():
         }
     }
 
-    # Sheety に POST
-    response = requests.post(SHEETY_ENDPOINT, json=payload)
-
-    if response.status_code in [200, 201]:
-        print(f"[SAVED] {user_id} at {timestamp}")
-        return jsonify({"status": "success"}), 200
-    else:
-        print(f"[ERROR] {response.text}")
-        return jsonify({"status": "error", "message": response.text}), 500  
+    try:
+        response = requests.post(SHEETY_ENDPOINT, json=payload)
+        if response.status_code in [200, 201]:
+            print(f"[SAVED] {user_id} at {timestamp}")
+            return jsonify({"status": "success"}), 200
+        else:
+            print(f"[ERROR] {response.text}")
+            return jsonify({"status": "error", "message": response.text}), 500
+    except Exception as e:
+        print(f"[EXCEPTION] {e}")
+        return jsonify({"status": "error", "message": str(e)}), 500
