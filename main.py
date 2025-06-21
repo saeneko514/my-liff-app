@@ -16,11 +16,16 @@ def index():
 def agreement():
     data = request.json
     user_id = data.get("userId")
+    display_name = data.get("displayName")  # ← 追加
     timestamp = data.get("agreedAt", datetime.utcnow().isoformat())
+
+    if not user_id or not display_name:
+        return jsonify({"status": "error", "message": "userId または displayName がありません"}), 400
 
     payload = {
         "userdata": {
             "userId": user_id,
+            "displayName": display_name,  # ← 追加
             "agreedAt": timestamp
         }
     }
