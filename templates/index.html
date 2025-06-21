@@ -61,10 +61,11 @@
             agreedAt: new Date().toISOString()
           }),
         });
-        
+        console.log("HTTPステータス:", res.status);
         const text = await res.text();
-        console.log("レスポンス全文:", text);
-        
+        console.log("レスポンス本文:", text);
+
+       
         try {
           const result = JSON.parse(text);
           console.log("パース済みレスポンス:", result);
