@@ -21,6 +21,7 @@ def agreement():
     user_id = data.get("userId")
     display_name = data.get("displayName")  
     timestamp = data.get("agreedAt", datetime.utcnow().isoformat())
+    return jsonify({"status": "success"}), 200
 
     if not user_id or not display_name:
         return jsonify({"status": "error", "message": "userId または displayName がありません"}), 400
