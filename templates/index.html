@@ -38,9 +38,10 @@
 
   <button id="agreeBtn">同意する</button>
 
+
   <script>
     async function init() {
-      await liff.init({ liffId: "YOUR_LIFF_ID" });
+      await liff.init({ liffId: "2007611883-Ov7pDk5V" });
       if (!liff.isLoggedIn()) liff.login();
 
       document.getElementById("agreeBtn").onclick = async () => {
