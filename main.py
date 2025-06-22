@@ -58,8 +58,13 @@ def agreement():
             "to": user_id,
             "messages": [{
                 "type": "text",
-                "text": f"{display_name}さん、ご同意ありがとうございます！\nこれからかんじょうにっきをよろしくお願いします☺"
-                "text": "あなたのいまの自己肯定感スコアを知るために/n最初にこちらのアンケートにお答えください\nhttps://app.namisapo3.love""
+                "text": (
+                    f"{display_name}さん、ご同意ありがとうございます！\n"
+                    "これからかんじょうにっきをよろしくお願いします☺\n"
+                    "あなたのいまの自己肯定感スコアを知るために\n"
+                    "最初にこちらのアンケートにお答えください\n"
+                    "https://app.namisapo3.love"
+                )
             }]
         }
         push_response = requests.post("https://api.line.me/v2/bot/message/push",
