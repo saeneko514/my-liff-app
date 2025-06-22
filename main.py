@@ -20,7 +20,7 @@ def agreement():
     data = request.json
     print("[POST /api/agreement] 受信データ:", data)
     
-    useragreement = data.get("useragreement", {})
+    useragreement = data.get("userAgreement", {})
     user_id = useragreement.get("userId")
     display_name = useragreement.get("displayName")
     timestamp = useragreement.get("agreedAt", datetime.utcnow().isoformat())
