@@ -58,7 +58,7 @@ def agreement():
             "to": user_id,
             "messages": [{
                 "type": "text",
-                "text": f"{display_name}さん、ご同意ありがとうございます！\n本日も感情日記をよろしくお願いします😊"
+                "text": f"{display_name}さん、ご同意ありがとうございます！\n次にこちらからアンケートに答えてください\nhttps://app.namisapo3.love"
             }]
         }
         push_response = requests.post("https://api.line.me/v2/bot/message/push",
