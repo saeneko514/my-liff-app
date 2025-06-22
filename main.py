@@ -46,4 +46,7 @@ def agreement():
             return jsonify({"status": "error", "message": response.text}), 500
     except Exception as e:
         print(f"[EXCEPTION] {e}")
-        return jsonify({"status":
+        return jsonify({"status": "error", "message": str(e)}), 500
+
+if __name__ == "__main__":
+    app.run(host="0.0.0.0", port=5000)
