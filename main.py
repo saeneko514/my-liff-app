@@ -4,9 +4,8 @@ from datetime import datetime, timedelta
 import requests
 import os
 
-# 環境変数からSheetyのIDを取得
+
 SHEETY_ID = os.environ.get("SHEETY_ID")
-# SheetyのエンドポイントURL。大文字小文字はAPI仕様に合わせてください
 SHEETY_ENDPOINT = f"https://api.sheety.co/{SHEETY_ID}/新しい自己肯定感スコアアプリ測定結果/useragreement"
 
 app = Flask(__name__)
@@ -26,7 +25,7 @@ def agreement():
     user_id = useragreement.get("userId")
     display_name = useragreement.get("displayName")
 
-    # 日本時間で現在の日付（年月日だけ）
+
     now = datetime.utcnow() + timedelta(hours=9)
     timestamp = now.strftime("%Y-%m-%d")
 
@@ -34,7 +33,7 @@ def agreement():
         return jsonify({"status": "error", "message": "userId または displayName がありません"}), 400
 
     payload = {
-        "useragreement": {  # Sheety APIのルートキー（小文字でuseragreement）
+        "useragreement": {
             "userId": user_id,
             "displayName": display_name,
             "agreedAt": timestamp
