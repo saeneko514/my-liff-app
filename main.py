@@ -14,7 +14,6 @@ CORS(app, resources={r"/*": {"origins": "*"}})
 
 @app.route("/")
 def index():
-    # 利用規約同意ページ（index.html）を返す想定
     return render_template("index.html")
 
 @app.route("/api/agreement", methods=["POST"])
@@ -26,14 +25,13 @@ def agreement():
     user_id = useragreement.get("userId")
     display_name = useragreement.get("displayName")
 
-    # 日本時間で年月日だけ取得
+    # 日本時間で現在の日付（年月日だけ）
     now = datetime.utcnow() + timedelta(hours=9)
     timestamp = now.strftime("%Y-%m-%d")
 
     if not user_id or not display_name:
         return jsonify({"status": "error", "message": "userId または displayName がありません"}), 400
 
-    # Sheetyへ送るペイロード（小文字の"useragreement"が重要）
     payload = {
         "useragreement": {
             "userId": user_id,
@@ -43,7 +41,7 @@ def agreement():
     }
 
     try:
-        # SheetyにPOST
+        # Sheety に保存
         response = requests.post(SHEETY_ENDPOINT, json=payload)
         if response.status_code not in [200, 201]:
             print(f"[ERROR] Sheety Error: {response.text}")
@@ -51,7 +49,7 @@ def agreement():
 
         print(f"[SAVED] {user_id} at {timestamp}")
 
-        # 同意ありがとうメッセージをLINE Push送信
+        # LINEへ Push メッセージ送信
         headers = {
             "Authorization": f"Bearer {LINE_CHANNEL_ACCESS_TOKEN}",
             "Content-Type": "application/json"
@@ -60,7 +58,8 @@ def agreement():
             "to": user_id,
             "messages": [{
                 "type": "text",
-                "text": f"{display_name}さん、ご同意ありがとうございます！\n次にこちらからアンケートに答えてください\nhttps://app.namisapo3.love"
+                "text": f"{display_name}さん、ご同意ありがとうございます！\nこれからかんじょうにっきをよろしくお願いします☺"
+                "text": "あなたのいまの自己肯定感スコアを知るために/n最初にこちらのアンケートにお答えください\nhttps://app.namisapo3.love""
             }]
         }
         push_response = requests.post("https://api.line.me/v2/bot/message/push",
@@ -73,33 +72,6 @@ def agreement():
     except Exception as e:
         print(f"[EXCEPTION] {e}")
         return jsonify({"status": "error", "message": str(e)}), 500
-
-@app.route("/api/thankyou", methods=["POST"])
-def thank_you():
-    data = request.json
-    user_id = data.get("userId")
-    display_name = data.get("displayName", "")
-
-    if not user_id:
-        return jsonify({"status": "error", "message": "userId がありません"}), 400
-
-    # アンケートありがとうメッセージ送信
-    headers = {
-        "Authorization": f"Bearer {LINE_CHANNEL_ACCESS_TOKEN}",
-        "Content-Type": "application/json"
-    }
-    message = {
-        "to": user_id,
-        "messages": [{
-            "type": "text",
-            "text": f"{display_name}さん、アンケートへのご協力ありがとうございました！\nこれからかんじょうにっきをよろしくお願いします☺"
-        }]
-    }
-
-    res = requests.post("https://api.line.me/v2/bot/message/push", headers=headers, json=message)
-    print("[PUSH THANK YOU]", res.status_code, res.text)
-
-    return jsonify({"status": "success"}), 200
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=5000)
