@@ -29,7 +29,7 @@ def agreement():
         return jsonify({"status": "error", "message": "userId または displayName がありません"}), 400
 
     payload = {
-        "userAgreement": {
+        "useragreement": {
             "userId": user_id,
             "displayName": display_name,
             "agreedAt": timestamp
