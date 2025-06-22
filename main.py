@@ -28,7 +28,7 @@ def agreement():
 
     # 日本時間で現在の日付（年月日だけ）
     now = datetime.utcnow() + timedelta(hours=9)
-    timestamp = useragreement.get("agreedAt", now.strftime("%Y-%m-%d"))
+    timestamp = now.strftime("%Y-%m-%d")
 
     if not user_id or not display_name:
         return jsonify({"status": "error", "message": "userId または displayName がありません"}), 400
