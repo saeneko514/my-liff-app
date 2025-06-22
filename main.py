@@ -6,7 +6,7 @@ import os
 
 # 環境変数からSheey IDを取得
 SHEETY_ID = os.environ.get("SHEETY_ID")
-SHEETY_ENDPOINT = f"https://api.sheety.co/{SHEETY_ID}/新しい自己肯定感スコアアプリ測定結果/userAgreement"
+SHEETY_ENDPOINT = f"https://api.sheety.co/{SHEETY_ID}/新しい自己肯定感スコアアプリ測定結果/useragreement"
 
 app = Flask(__name__)
 CORS(app, resources={r"/*": {"origins": "*"}})
@@ -20,7 +20,7 @@ def agreement():
     data = request.json
     print("[POST /api/agreement] 受信データ:", data)
     
-    useragreement = data.get("userAgreement", {})
+    useragreement = data.get("useragreement", {})
     user_id = useragreement.get("userId")
     display_name = useragreement.get("displayName")
     timestamp = useragreement.get("agreedAt", datetime.utcnow().isoformat())
