@@ -65,11 +65,12 @@
         console.log("✅ ユーザーID:", userId);
         console.log("✅ 表示名:", displayName);
 
+        // Sheety APIの仕様に合わせてuseragreementでラップする
         const response = await fetch("https://my-liff-app.onrender.com/api/agreement", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
-            useragreement: {   // ← ここでラップ
+            useragreement: {
               userId,
               displayName,
               agreedAt: new Date().toISOString()
